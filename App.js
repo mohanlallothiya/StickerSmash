@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View,ToastAndroid, Platform } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState, useRef } from 'react';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -13,6 +13,8 @@ import EmojiSticker from './components/EmojiSticker';
 import { captureRef } from 'react-native-view-shot';
 import * as MediaLibrary from 'expo-media-library';
 import domtoimage from 'dom-to-image';
+import { RootSiblingParent } from 'react-native-root-siblings';
+import Toast from 'react-native-root-toast';
 
 const PlaceholderImage = require('./assets/images/background-image.png');
 
@@ -38,7 +40,9 @@ export default function App() {
       setSelectedImage(result.assets[0].uri);
       setShowAppOptions(true);
     } else {
-      ToastAndroid.show('You did not select any image.', ToastAndroid.SHORT);
+      Toast.show('You did not select any image.', {
+        duration: Toast.durations.SHORT,
+      });
     }
   };
   const onReset = () => {
@@ -55,7 +59,9 @@ export default function App() {
         });
         await MediaLibrary.saveToLibraryAsync(localUri);
         if (localUri) {
-          ToastAndroid.show('Image saved!', ToastAndroid.SHORT);
+          Toast.show('Image saved!', {
+            duration: Toast.durations.SHORT,
+          });
           setPickedEmoji(null);
           setShowAppOptions(false);
         }
@@ -88,6 +94,7 @@ export default function App() {
   };
 
   return (
+    <RootSiblingParent> 
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.imageContainer}>
       <View ref={imageRef} collapsable={false}>
@@ -114,6 +121,7 @@ export default function App() {
       </EmojiPicker>
       <StatusBar style="auto" />
     </GestureHandlerRootView>
+    </RootSiblingParent> 
   );
 }
 
